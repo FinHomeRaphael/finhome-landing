@@ -583,10 +583,6 @@
         <label for="epargne">Épargne mensuelle (€)</label>
         <input type="number" id="epargne" placeholder="ex: 300">
       </div>
-      <div class="calc-row">
-        <label for="dettes">Total des dettes restantes (€)</label>
-        <input type="number" id="dettes" placeholder="ex: 180000">
-      </div>
     </div>
     <div class="calc-row">
       <label for="membres">Nombre de personnes dans le foyer</label>
@@ -604,7 +600,7 @@
       <div class="score-label" id="scoreLabel"></div>
       <div class="score-detail" id="scoreDetail"></div>
       <div class="score-cta">
-        <a href="https://fin-home.io/login" class="btn-primary" style="margin-top:16px;">Améliorer mon score avec FinHome →</a>
+        <a href="https://fin-home.io/login" class="btn-primary" style="margin-top:16px;">Obtiens un résultat plus complet et précis sur FinHome →</a>
       </div>
     </div>
   </div>
@@ -777,31 +773,25 @@ function calculateScore() {
   const revenus = parseFloat(document.getElementById('revenus').value) || 0;
   const depenses = parseFloat(document.getElementById('depenses').value) || 0;
   const epargne = parseFloat(document.getElementById('epargne').value) || 0;
-  const dettes = parseFloat(document.getElementById('dettes').value) || 0;
   if (revenus === 0) { alert('Veuillez entrer vos revenus mensuels.'); return; }
-  let score = 50;
+  let score = 40;
   const tauxEpargne = (epargne / revenus) * 100;
-  if (tauxEpargne >= 20) score += 25;
-  else if (tauxEpargne >= 10) score += 15;
-  else if (tauxEpargne >= 5) score += 8;
+  if (tauxEpargne >= 20) score += 30;
+  else if (tauxEpargne >= 10) score += 20;
+  else if (tauxEpargne >= 5) score += 10;
   else score -= 5;
   const ratio = depenses / revenus;
-  if (ratio <= 0.6) score += 15;
-  else if (ratio <= 0.8) score += 8;
+  if (ratio <= 0.5) score += 30;
+  else if (ratio <= 0.7) score += 20;
+  else if (ratio <= 0.85) score += 10;
   else if (ratio <= 0.95) score -= 5;
-  else score -= 15;
-  const dr = dettes / (revenus * 12);
-  if (dr === 0) score += 10;
-  else if (dr <= 3) score += 5;
-  else if (dr <= 6) score -= 0;
-  else if (dr <= 10) score -= 10;
   else score -= 15;
   score = Math.max(5, Math.min(100, Math.round(score)));
   let label, color, bg, detail;
-  if (score >= 80) { label = 'Excellente'; color = '#27AE60'; bg = '#EAFAF1'; detail = 'Votre foyer a une santé financière remarquable. Continuez ainsi et optimisez votre épargne avec le Coach IA de FinHome.'; }
-  else if (score >= 60) { label = 'Bonne'; color = '#2980B9'; bg = '#EBF5FB'; detail = 'Votre foyer est sur la bonne voie. FinHome peut vous aider à identifier les leviers pour passer au niveau supérieur.'; }
-  else if (score >= 40) { label = 'À améliorer'; color = '#F39C12'; bg = '#FEF9E7'; detail = 'Il y a du potentiel ! FinHome peut vous aider à optimiser vos budgets et accélérer votre épargne.'; }
-  else { label = 'Attention requise'; color = '#E74C3C'; bg = '#FDEDEC'; detail = 'Votre foyer a besoin d\'attention. Le Coach IA de FinHome peut créer un plan d\'action personnalisé.'; }
+  if (score >= 80) { label = 'Excellente'; color = '#27AE60'; bg = '#EAFAF1'; detail = 'Votre foyer a une santé financière remarquable !'; }
+  else if (score >= 60) { label = 'Bonne'; color = '#2980B9'; bg = '#EBF5FB'; detail = 'Votre foyer est sur la bonne voie.'; }
+  else if (score >= 40) { label = 'À améliorer'; color = '#F39C12'; bg = '#FEF9E7'; detail = 'Il y a du potentiel pour votre foyer !'; }
+  else { label = 'Attention requise'; color = '#E74C3C'; bg = '#FDEDEC'; detail = 'Votre foyer a besoin d\'attention.'; }
   const result = document.getElementById('calcResult');
   document.getElementById('scoreCircle').textContent = score;
   document.getElementById('scoreCircle').style.background = color;
