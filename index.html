@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinHome — Gérez les finances de votre foyer</title>
+  <meta name="description" content="FinHome réunit budgets, dettes, épargne et coaching IA pour que votre foyer prenne le contrôle de ses finances, ensemble.">
+  <meta name="keywords" content="gestion budget familial, finances couple, application budget foyer, fintech famille, épargne famille">
+  <meta property="og:title" content="FinHome — Vos finances en famille, enfin simples.">
+  <meta property="og:description" content="Budgets partagés, suivi des dettes, comptes bancaires dédiés et coach IA. L'app financière pensée pour le foyer.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://fin-home.io">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary: #1A5276;
+      --primary-light: #2980B9;
+      --secondary: #2ECC71;
+      --secondary-dark: #27AE60;
+      --accent: #E74C3C;
+      --dark: #1a1a2e;
+      --text: #2C3E50;
+      --text-light: #5D6D7E;
+      --bg: #FAFBFC;
+      --white: #FFFFFF;
+      --fingreen: #4CAF82;
+      --card-shadow: 0 4px 24px rgba(0,0,0,0.06);
+      --card-shadow-hover: 0 8px 40px rgba(0,0,0,0.12);
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', -apple-system, sans-serif; color: var(--text); background: var(--bg); line-height: 1.6; overflow-x: hidden; }
+
+    /* NAV */
+    nav { position: fixed; top: 0; width: 100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); z-index: 1000; border-bottom: 1px solid rgba(0,0,0,0.05); }
+    .nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 24px; font-weight: 800; color: var(--primary); text-decoration: none; }
+    .logo span { color: var(--fingreen); }
+    .nav-links { display: flex; gap: 32px; align-items: center; }
+    .nav-links a { text-decoration: none; color: var(--text-light); font-size: 14px; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--primary); }
+    .btn-nav { background: var(--fingreen); color: white !important; padding: 10px 24px; border-radius: 8px; font-weight: 600; transition: all 0.3s; }
+    .btn-nav:hover { background: var(--secondary-dark); transform: translateY(-1px); }
+
+    /* HERO */
+    .hero { padding: 130px 24px 60px; background: linear-gradient(135deg, #f0f7ff 0%, #e8faf0 50%, #fafbfc 100%); position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; top: -50%; right: -30%; width: 600px; height: 600px; background: radial-gradient(circle, rgba(76,175,130,0.08) 0%, transparent 70%); border-radius: 50%; }
+    .hero-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+    .hero-text { }
+    .hero-badge { display: inline-block; background: rgba(76,175,130,0.1); color: var(--fingreen); padding: 8px 20px; border-radius: 50px; font-size: 13px; font-weight: 600; margin-bottom: 24px; }
+    .hero h1 { font-size: clamp(32px, 4vw, 54px); font-weight: 800; line-height: 1.1; margin-bottom: 20px; color: var(--dark); }
+    .hero h1 .highlight { background: linear-gradient(135deg, var(--primary), var(--fingreen)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero p { font-size: 18px; color: var(--text-light); margin-bottom: 32px; line-height: 1.6; }
+    .hero-cta { display: flex; gap: 16px; flex-wrap: wrap; }
+    .btn-primary { background: var(--fingreen); color: white; padding: 16px 36px; border-radius: 12px; font-size: 17px; font-weight: 700; text-decoration: none; border: none; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-primary:hover { background: var(--secondary-dark); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(76,175,130,0.3); }
+    .btn-secondary { background: white; color: var(--primary); padding: 16px 36px; border-radius: 12px; font-size: 17px; font-weight: 600; text-decoration: none; border: 2px solid var(--primary); transition: all 0.3s; }
+    .btn-secondary:hover { background: var(--primary); color: white; }
+    .hero-stats { display: flex; gap: 40px; margin-top: 40px; }
+    .hero-stat { text-align: left; }
+    .hero-stat .number { font-size: 28px; font-weight: 800; color: var(--primary); }
+    .hero-stat .label { font-size: 13px; color: var(--text-light); margin-top: 2px; }
+
+    /* PHONE MOCKUP */
+    .phone-mockup { position: relative; display: flex; justify-content: center; }
+    .phone-frame { width: 300px; height: 600px; background: #fff; border-radius: 36px; box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 0 0 8px #1a1a2e; overflow: hidden; position: relative; }
+    .phone-notch { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 120px; height: 28px; background: #1a1a2e; border-radius: 0 0 16px 16px; z-index: 10; }
+    .phone-screen { padding: 36px 16px 16px; height: 100%; overflow: hidden; background: #fafbfc; }
+    .ps-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .ps-logo { font-size: 16px; font-weight: 800; color: var(--fingreen); }
+    .ps-toggles { display: flex; gap: 6px; }
+    .ps-toggle { padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 600; border: none; cursor: default; }
+    .ps-toggle.active { background: var(--fingreen); color: white; }
+    .ps-toggle.inactive { background: #f0f0f0; color: #999; }
+    .ps-welcome { font-size: 11px; color: #999; margin-bottom: 2px; }
+    .ps-name { font-size: 16px; font-weight: 700; color: var(--dark); margin-bottom: 12px; }
+    .ps-balance-card { background: var(--fingreen); border-radius: 14px; padding: 16px; color: white; margin-bottom: 14px; }
+    .ps-balance-label { font-size: 10px; opacity: 0.8; }
+    .ps-balance-amount { font-size: 28px; font-weight: 800; margin: 4px 0; }
+    .ps-balance-change { font-size: 10px; background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 10px; display: inline-block; }
+    .ps-actions { display: flex; justify-content: space-around; margin-bottom: 14px; }
+    .ps-action { text-align: center; }
+    .ps-action-icon { width: 36px; height: 36px; border-radius: 10px; background: #f0f5f3; display: flex; align-items: center; justify-content: center; font-size: 16px; margin: 0 auto 4px; }
+    .ps-action-label { font-size: 8px; color: #999; font-weight: 500; }
+    .ps-section-title { font-size: 12px; font-weight: 700; color: var(--dark); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+    .ps-section-link { font-size: 9px; color: var(--fingreen); font-weight: 600; }
+    .ps-health-card { background: white; border-radius: 12px; padding: 12px; border: 1px solid #eee; margin-bottom: 12px; text-align: center; }
+    .ps-gauge { width: 80px; height: 44px; margin: 0 auto 6px; position: relative; overflow: hidden; }
+    .ps-gauge-bg { width: 80px; height: 80px; border-radius: 50%; border: 6px solid #e0e0e0; border-bottom-color: transparent; border-left-color: transparent; transform: rotate(225deg); position: absolute; top: 0; }
+    .ps-gauge-fill { width: 80px; height: 80px; border-radius: 50%; border: 6px solid var(--fingreen); border-bottom-color: transparent; border-left-color: transparent; border-right-color: transparent; transform: rotate(225deg); position: absolute; top: 0; }
+    .ps-health-label { font-size: 10px; font-weight: 600; color: var(--fingreen); }
+    .ps-health-row { display: flex; gap: 8px; margin-top: 6px; }
+    .ps-health-stat { flex: 1; background: #f7faf8; border-radius: 8px; padding: 6px; text-align: center; }
+    .ps-health-stat-label { font-size: 8px; color: #999; }
+    .ps-health-stat-val { font-size: 11px; font-weight: 700; color: var(--dark); }
+    .ps-tx-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #f5f5f5; }
+    .ps-tx-left { display: flex; align-items: center; gap: 8px; }
+    .ps-tx-icon { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px; }
+    .ps-tx-name { font-size: 11px; font-weight: 600; color: var(--dark); }
+    .ps-tx-cat { font-size: 9px; color: #999; }
+    .ps-tx-amount { font-size: 11px; font-weight: 700; }
+    .ps-tx-pos { color: var(--fingreen); }
+    .ps-tx-neg { color: var(--accent); }
+
+    /* APP SHOWCASE */
+    .app-showcase { padding: 100px 24px; background: white; }
+    .showcase-grid { max-width: 1100px; margin: 0 auto; }
+    .showcase-row { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; margin-bottom: 80px; }
+    .showcase-row.reverse { direction: rtl; }
+    .showcase-row.reverse > * { direction: ltr; }
+    .showcase-text h3 { font-size: 28px; font-weight: 800; color: var(--dark); margin-bottom: 12px; }
+    .showcase-text p { font-size: 16px; color: var(--text-light); line-height: 1.7; margin-bottom: 16px; }
+    .showcase-tag { display: inline-block; background: rgba(76,175,130,0.1); color: var(--fingreen); padding: 4px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-bottom: 12px; }
+    .showcase-visual { display: flex; justify-content: center; }
+
+    /* Mini app cards for showcase */
+    .app-card { width: 340px; background: white; border-radius: 20px; box-shadow: 0 12px 40px rgba(0,0,0,0.1); overflow: hidden; padding: 20px; }
+    .ac-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .ac-title { font-size: 14px; font-weight: 700; color: var(--dark); }
+    .ac-badge { font-size: 10px; color: var(--fingreen); font-weight: 600; }
+    .ac-budget-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f5f5f5; }
+    .ac-budget-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+    .ac-budget-info { flex: 1; }
+    .ac-budget-name { font-size: 12px; font-weight: 600; color: var(--dark); }
+    .ac-budget-bar { height: 6px; background: #f0f0f0; border-radius: 3px; margin-top: 4px; overflow: hidden; }
+    .ac-budget-fill { height: 100%; border-radius: 3px; }
+    .ac-budget-nums { font-size: 10px; color: #999; margin-top: 2px; }
+    .ac-debt-item { padding: 12px 0; border-bottom: 1px solid #f5f5f5; }
+    .ac-debt-top { display: flex; justify-content: space-between; margin-bottom: 6px; }
+    .ac-debt-name { font-size: 12px; font-weight: 600; color: var(--dark); }
+    .ac-debt-amount { font-size: 12px; font-weight: 700; color: var(--primary); }
+    .ac-savings-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #f5f5f5; }
+    .ac-savings-emoji { font-size: 24px; }
+    .ac-savings-info { flex: 1; }
+    .ac-savings-name { font-size: 12px; font-weight: 600; color: var(--dark); }
+    .ac-savings-pct { font-size: 18px; font-weight: 800; color: var(--fingreen); }
+
+    /* PROBLEM */
+    .problem { padding: 100px 24px; background: var(--dark); color: white; text-align: center; }
+    .problem h2 { font-size: 36px; font-weight: 700; margin-bottom: 16px; }
+    .problem .subtitle { font-size: 18px; opacity: 0.7; margin-bottom: 60px; max-width: 600px; margin-left: auto; margin-right: auto; }
+    .problem-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 32px; max-width: 1000px; margin: 0 auto; }
+    .problem-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 32px; text-align: left; }
+    .problem-card .emoji { font-size: 36px; margin-bottom: 16px; }
+    .problem-card h3 { font-size: 20px; font-weight: 600; margin-bottom: 8px; }
+    .problem-card p { font-size: 15px; opacity: 0.7; line-height: 1.6; }
+
+    /* FEATURES */
+    .features { padding: 100px 24px; background: var(--bg); }
+    .section-header { text-align: center; margin-bottom: 64px; }
+    .section-header h2 { font-size: 36px; font-weight: 800; color: var(--dark); margin-bottom: 16px; }
+    .section-header p { font-size: 18px; color: var(--text-light); max-width: 560px; margin: 0 auto; }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 28px; max-width: 1100px; margin: 0 auto; }
+    .feature-card { background: white; border-radius: 20px; padding: 36px; transition: all 0.3s; border: 1px solid transparent; }
+    .feature-card:hover { box-shadow: var(--card-shadow-hover); border-color: rgba(76,175,130,0.2); transform: translateY(-4px); }
+    .feature-icon { width: 56px; height: 56px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 28px; margin-bottom: 20px; }
+    .fi-blue { background: rgba(26,82,118,0.1); }
+    .fi-green { background: rgba(76,175,130,0.1); }
+    .fi-orange { background: rgba(243,156,18,0.1); }
+    .fi-purple { background: rgba(155,89,182,0.1); }
+    .fi-red { background: rgba(231,76,60,0.1); }
+    .fi-teal { background: rgba(22,160,133,0.1); }
+    .feature-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 10px; color: var(--dark); }
+    .feature-card p { font-size: 15px; color: var(--text-light); line-height: 1.6; }
+
+    /* CALCULATOR */
+    .calculator { padding: 100px 24px; background: linear-gradient(135deg, #f0f7ff, #e8faf0); }
+    .calc-container { max-width: 700px; margin: 0 auto; background: white; border-radius: 24px; padding: 48px; box-shadow: var(--card-shadow); }
+    .calc-container h2 { font-size: 28px; font-weight: 800; text-align: center; margin-bottom: 8px; color: var(--dark); }
+    .calc-container .calc-sub { text-align: center; color: var(--text-light); margin-bottom: 36px; font-size: 16px; }
+    .calc-row { margin-bottom: 24px; }
+    .calc-row label { display: block; font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+    .calc-row input, .calc-row select { width: 100%; padding: 14px 18px; border: 2px solid #E8ECF0; border-radius: 12px; font-size: 16px; font-family: inherit; transition: border-color 0.2s; outline: none; }
+    .calc-row input:focus, .calc-row select:focus { border-color: var(--fingreen); }
+    .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .calc-btn { width: 100%; padding: 16px; background: var(--fingreen); color: white; border: none; border-radius: 12px; font-size: 17px; font-weight: 700; cursor: pointer; transition: all 0.3s; margin-top: 8px; }
+    .calc-btn:hover { background: var(--secondary-dark); }
+    .calc-result { display: none; margin-top: 32px; padding: 28px; border-radius: 16px; text-align: center; }
+    .calc-result.show { display: block; }
+    .score-circle { width: 120px; height: 120px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 36px; font-weight: 800; color: white; }
+    .score-label { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+    .score-detail { font-size: 15px; color: var(--text-light); line-height: 1.6; }
+    .score-cta { margin-top: 24px; }
+
+    /* PRICING */
+    .pricing { padding: 100px 24px; background: white; }
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; max-width: 960px; margin: 0 auto; }
+    .price-card { background: var(--bg); border-radius: 20px; padding: 40px 32px; text-align: center; border: 2px solid transparent; transition: all 0.3s; position: relative; }
+    .price-card:hover { box-shadow: var(--card-shadow-hover); }
+    .price-card.popular { border-color: var(--fingreen); transform: scale(1.04); background: white; }
+    .price-card.popular::before { content: 'Le plus populaire'; position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--fingreen); color: white; padding: 6px 20px; border-radius: 50px; font-size: 12px; font-weight: 700; }
+    .price-name { font-size: 22px; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+    .price-amount { font-size: 48px; font-weight: 800; color: var(--primary); margin: 16px 0 4px; }
+    .price-amount span { font-size: 18px; font-weight: 500; color: var(--text-light); }
+    .price-save { font-size: 14px; color: var(--fingreen); font-weight: 600; margin-bottom: 24px; min-height: 20px; }
+    .price-features { list-style: none; text-align: left; margin-bottom: 32px; }
+    .price-features li { padding: 8px 0; font-size: 15px; color: var(--text); display: flex; align-items: center; gap: 10px; }
+    .price-features li::before { content: '✓'; color: var(--fingreen); font-weight: 700; font-size: 16px; }
+    .price-btn { display: block; width: 100%; padding: 14px; border-radius: 12px; font-size: 16px; font-weight: 700; text-decoration: none; transition: all 0.3s; cursor: pointer; border: none; }
+    .price-btn-primary { background: var(--fingreen); color: white; }
+    .price-btn-primary:hover { background: var(--secondary-dark); }
+    .price-btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--primary); }
+    .price-btn-outline:hover { background: var(--primary); color: white; }
+
+    /* TESTIMONIALS */
+    .testimonials { padding: 100px 24px; background: var(--bg); }
+    .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 28px; max-width: 1100px; margin: 0 auto; }
+    .testimonial-card { background: white; border-radius: 20px; padding: 32px; }
+    .testimonial-stars { color: #F1C40F; font-size: 18px; margin-bottom: 16px; }
+    .testimonial-text { font-size: 15px; color: var(--text); line-height: 1.7; margin-bottom: 20px; font-style: italic; }
+    .testimonial-author { display: flex; align-items: center; gap: 12px; }
+    .testimonial-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--fingreen); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 16px; }
+    .testimonial-name { font-weight: 600; font-size: 15px; }
+    .testimonial-role { font-size: 13px; color: var(--text-light); }
+
+    /* FAQ */
+    .faq { padding: 100px 24px; background: white; }
+    .faq-list { max-width: 720px; margin: 0 auto; }
+    .faq-item { background: var(--bg); border-radius: 14px; margin-bottom: 12px; overflow: hidden; }
+    .faq-question { width: 100%; padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; background: none; border: none; cursor: pointer; font-size: 16px; font-weight: 600; color: var(--dark); font-family: inherit; text-align: left; }
+    .faq-question .arrow { transition: transform 0.3s; font-size: 20px; color: var(--text-light); }
+    .faq-question.active .arrow { transform: rotate(180deg); }
+    .faq-answer { padding: 0 24px 20px; font-size: 15px; color: var(--text-light); line-height: 1.7; display: none; }
+    .faq-answer.show { display: block; }
+
+    /* CTA */
+    .final-cta { padding: 100px 24px; background: linear-gradient(135deg, var(--fingreen), var(--primary)); text-align: center; color: white; }
+    .final-cta h2 { font-size: 40px; font-weight: 800; margin-bottom: 16px; }
+    .final-cta p { font-size: 18px; opacity: 0.85; max-width: 500px; margin: 0 auto 40px; }
+    .btn-white { background: white; color: var(--primary); padding: 16px 40px; border-radius: 12px; font-size: 17px; font-weight: 700; text-decoration: none; border: none; cursor: pointer; transition: all 0.3s; display: inline-block; }
+    .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+
+    /* FOOTER */
+    footer { background: var(--dark); color: rgba(255,255,255,0.6); padding: 60px 24px 30px; }
+    .footer-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; }
+    .footer-brand .logo { font-size: 22px; color: white; display: block; margin-bottom: 12px; }
+    .footer-brand p { font-size: 14px; line-height: 1.6; }
+    .footer-col h4 { color: white; font-size: 14px; font-weight: 700; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px; }
+    .footer-col a { display: block; color: rgba(255,255,255,0.5); text-decoration: none; font-size: 14px; margin-bottom: 10px; transition: color 0.2s; }
+    .footer-col a:hover { color: white; }
+    .footer-bottom { max-width: 1100px; margin: 40px auto 0; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; font-size: 13px; }
+
+    @media (max-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr; text-align: center; }
+      .hero-cta { justify-content: center; }
+      .hero-stats { justify-content: center; }
+      .phone-mockup { margin-top: 40px; }
+      .showcase-row, .showcase-row.reverse { grid-template-columns: 1fr; direction: ltr; text-align: center; }
+      .showcase-row.reverse > * { direction: ltr; }
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hero-stats { flex-direction: column; gap: 16px; align-items: center; }
+      .footer-inner { grid-template-columns: 1fr; }
+      .calc-grid { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .price-card.popular { transform: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="logo">Fin<span>Home</span></a>
+    <div class="nav-links">
+      <a href="#features">Fonctionnalités</a>
+      <a href="#calculator">Calculateur</a>
+      <a href="#pricing">Tarifs</a>
+      <a href="#faq">FAQ</a>
+      <a href="https://fin-home.io/login" class="btn-nav">Se connecter</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO WITH APP MOCKUP -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <span class="hero-badge">Nouveau — Le coach IA financier pour votre foyer</span>
+      <h1>Vos finances en famille,<br><span class="highlight">enfin simples.</span></h1>
+      <p>FinHome réunit budgets, dettes, épargne et coaching IA pour que votre foyer prenne le contrôle de ses finances, ensemble.</p>
+      <div class="hero-cta">
+        <a href="https://fin-home.io/login" class="btn-primary">Commencer gratuitement →</a>
+        <a href="#features" class="btn-secondary">Découvrir</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="number">100%</div>
+          <div class="label">Gratuit pour commencer</div>
+        </div>
+        <div class="hero-stat">
+          <div class="number">2 min</div>
+          <div class="label">Pour créer votre foyer</div>
+        </div>
+        <div class="hero-stat">
+          <div class="number">IA</div>
+          <div class="label">Coach financier intégré</div>
+        </div>
+      </div>
+    </div>
+    <div class="phone-mockup">
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="ps-header">
+            <div class="ps-logo">FinHome</div>
+            <div class="ps-toggles">
+              <span class="ps-toggle active">Foyer</span>
+              <span class="ps-toggle inactive">Perso</span>
+            </div>
+          </div>
+          <div class="ps-welcome">BIENVENUE,</div>
+          <div class="ps-name">Sophie & Thomas</div>
+          <div class="ps-balance-card">
+            <div class="ps-balance-label">Solde du mois</div>
+            <div class="ps-balance-amount">4 832,50 €</div>
+            <span class="ps-balance-change">+12.3% ce mois-ci</span>
+          </div>
+          <div class="ps-actions">
+            <div class="ps-action"><div class="ps-action-icon">📅</div><div class="ps-action-label">PRÉPARER</div></div>
+            <div class="ps-action"><div class="ps-action-icon">🤖</div><div class="ps-action-label">COACH IA</div></div>
+            <div class="ps-action"><div class="ps-action-icon">📸</div><div class="ps-action-label">SCANNER</div></div>
+            <div class="ps-action"><div class="ps-action-icon">📊</div><div class="ps-action-label">RAPPORT</div></div>
+          </div>
+          <div class="ps-section-title">Santé Financière <span class="ps-section-link">Détails ›</span></div>
+          <div class="ps-health-card">
+            <div style="font-size:10px;font-weight:700;color:var(--fingreen);margin-bottom:4px;">Bonne santé</div>
+            <div class="ps-health-row">
+              <div class="ps-health-stat"><div class="ps-health-stat-label">Budget mensuel</div><div class="ps-health-stat-val">46% utilisé</div></div>
+              <div class="ps-health-stat"><div class="ps-health-stat-label">Épargne</div><div class="ps-health-stat-val" style="color:var(--fingreen)">+600 €</div></div>
+            </div>
+          </div>
+          <div class="ps-section-title">Transactions récentes <span class="ps-section-link">Voir tout ›</span></div>
+          <div class="ps-tx-item">
+            <div class="ps-tx-left"><div class="ps-tx-icon" style="background:#e8faf0">💰</div><div><div class="ps-tx-name">Salaire Sophie</div><div class="ps-tx-cat">Salaire · 4 mars</div></div></div>
+            <div class="ps-tx-amount ps-tx-pos">+2 800 €</div>
+          </div>
+          <div class="ps-tx-item">
+            <div class="ps-tx-left"><div class="ps-tx-icon" style="background:#fef5e7">🏠</div><div><div class="ps-tx-name">Loyer</div><div class="ps-tx-cat">Logement · 3 mars</div></div></div>
+            <div class="ps-tx-amount ps-tx-neg">-1 200 €</div>
+          </div>
+          <div class="ps-tx-item">
+            <div class="ps-tx-left"><div class="ps-tx-icon" style="background:#ebf5fb">🎯</div><div><div class="ps-tx-name">Épargne vacances</div><div class="ps-tx-cat">Transfert · 2 mars</div></div></div>
+            <div class="ps-tx-amount ps-tx-neg">-300 €</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem">
+  <h2>67% des couples se disputent à propos de l'argent.</h2>
+  <p class="subtitle">Ce n'est pas un problème de revenus. C'est un problème de visibilité.</p>
+  <div class="problem-grid">
+    <div class="problem-card">
+      <div class="emoji">😤</div>
+      <h3>Pas de vision commune</h3>
+      <p>Chacun gère son côté, personne ne sait où en est le foyer. Les surprises de fin de mois s'accumulent.</p>
+    </div>
+    <div class="problem-card">
+      <div class="emoji">📊</div>
+      <h3>Des outils individuels</h3>
+      <p>Les apps de budget existantes sont pensées pour une personne. Aucune ne gère un foyer avec crédits, épargne et budgets partagés.</p>
+    </div>
+    <div class="problem-card">
+      <div class="emoji">🏦</div>
+      <h3>Des dettes invisibles</h3>
+      <p>Crédit immobilier, prêt auto, dettes étudiantes... Difficile de voir l'impact réel sur votre santé financière globale.</p>
+    </div>
+  </div>
+</section>
+
+<!-- APP SHOWCASE WITH VISUALS -->
+<section class="app-showcase" id="features">
+  <div class="section-header">
+    <h2>Découvrez FinHome en action</h2>
+    <p>Une app complète pensée pour la gestion financière de votre foyer.</p>
+  </div>
+  <div class="showcase-grid">
+
+    <!-- Budgets -->
+    <div class="showcase-row">
+      <div class="showcase-text">
+        <span class="showcase-tag">Budgets intelligents</span>
+        <h3>Suivez chaque euro, par catégorie</h3>
+        <p>Créez des budgets par poste de dépense et visualisez en un coup d'oeil où en est votre foyer. Les barres de progression vous alertent avant de dépasser.</p>
+        <p>Logement, alimentation, santé, restaurants, loisirs... Vous personnalisez tout selon votre vie.</p>
+      </div>
+      <div class="showcase-visual">
+        <div class="app-card">
+          <div class="ac-header"><div class="ac-title">Budgets — Mars 2026</div><div class="ac-badge">Mode Foyer</div></div>
+          <div class="ac-budget-item">
+            <div class="ac-budget-icon" style="background:#fef5e7">🏠</div>
+            <div class="ac-budget-info">
+              <div class="ac-budget-name">Logement</div>
+              <div class="ac-budget-bar"><div class="ac-budget-fill" style="width:21%;background:var(--fingreen)"></div></div>
+              <div class="ac-budget-nums">250 € / 1 200 €</div>
+            </div>
+          </div>
+          <div class="ac-budget-item">
+            <div class="ac-budget-icon" style="background:#fdedec">🍽</div>
+            <div class="ac-budget-info">
+              <div class="ac-budget-name">Restaurants</div>
+              <div class="ac-budget-bar"><div class="ac-budget-fill" style="width:8%;background:var(--fingreen)"></div></div>
+              <div class="ac-budget-nums">20 € / 250 €</div>
+            </div>
+          </div>
+          <div class="ac-budget-item">
+            <div class="ac-budget-icon" style="background:#ebf5fb">💊</div>
+            <div class="ac-budget-info">
+              <div class="ac-budget-name">Santé</div>
+              <div class="ac-budget-bar"><div class="ac-budget-fill" style="width:0%;background:var(--fingreen)"></div></div>
+              <div class="ac-budget-nums">0 € / 500 €</div>
+            </div>
+          </div>
+          <div class="ac-budget-item">
+            <div class="ac-budget-icon" style="background:#f4ecf7">🛒</div>
+            <div class="ac-budget-info">
+              <div class="ac-budget-name">Courses</div>
+              <div class="ac-budget-bar"><div class="ac-budget-fill" style="width:65%;background:#F39C12"></div></div>
+              <div class="ac-budget-nums">390 € / 600 €</div>
+            </div>
+          </div>
+          <div class="ac-budget-item" style="border:none">
+            <div class="ac-budget-icon" style="background:#e8faf0">🚗</div>
+            <div class="ac-budget-info">
+              <div class="ac-budget-name">Transport</div>
+              <div class="ac-budget-bar"><div class="ac-budget-fill" style="width:88%;background:var(--accent)"></div></div>
+              <div class="ac-budget-nums">175 € / 200 €</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dettes -->
+    <div class="showcase-row reverse">
+      <div class="showcase-text">
+        <span class="showcase-tag">Suivi des dettes</span>
+        <h3>Visualisez tous vos engagements</h3>
+        <p>Crédit immobilier, prêt auto, dettes étudiantes — tout est là. Suivez la progression de chaque remboursement et voyez l'impact sur votre santé financière.</p>
+        <p>Vous savez exactement combien il vous reste à rembourser et quand vous serez libres.</p>
+      </div>
+      <div class="showcase-visual">
+        <div class="app-card">
+          <div class="ac-header"><div class="ac-title">Dettes — Vue globale</div><div class="ac-badge" style="color:var(--accent)">506 500 € restant</div></div>
+          <div class="ac-debt-item">
+            <div class="ac-debt-top"><div class="ac-debt-name">🏠 Appartement Paris</div><div class="ac-debt-amount">240 000 €</div></div>
+            <div class="ac-budget-bar" style="height:8px"><div class="ac-budget-fill" style="width:96%;background:var(--primary)"></div></div>
+            <div class="ac-budget-nums">240 000 € / 250 000 € — Encore 18 ans</div>
+          </div>
+          <div class="ac-debt-item">
+            <div class="ac-debt-top"><div class="ac-debt-name">🏗 Investissement locatif</div><div class="ac-debt-amount">246 500 €</div></div>
+            <div class="ac-budget-bar" style="height:8px"><div class="ac-budget-fill" style="width:99%;background:var(--primary)"></div></div>
+            <div class="ac-budget-nums">246 500 € / 250 000 € — Encore 20 ans</div>
+          </div>
+          <div class="ac-debt-item" style="border:none">
+            <div class="ac-debt-top"><div class="ac-debt-name">🚗 Voiture</div><div class="ac-debt-amount">20 000 €</div></div>
+            <div class="ac-budget-bar" style="height:8px"><div class="ac-budget-fill" style="width:100%;background:var(--accent)"></div></div>
+            <div class="ac-budget-nums">20 000 € / 20 000 € — Encore 3 ans</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Épargne -->
+    <div class="showcase-row">
+      <div class="showcase-text">
+        <span class="showcase-tag">Comptes bancaires centralisés</span>
+        <h3>Tous vos comptes réunis au même endroit</h3>
+        <p>Créez des comptes bancaires séparés pour chaque objectif : vacances, études, fonds d'urgence... et centralisez-les dans une seule interface.</p>
+        <p>Fini de jongler entre plusieurs E-Banking. FinHome réunit tout pour une expérience bien plus agréable au quotidien.</p>
+      </div>
+      <div class="showcase-visual">
+        <div class="app-card">
+          <div class="ac-header"><div class="ac-title">Comptes — Vue globale</div><div class="ac-badge">4 comptes liés</div></div>
+          <div class="ac-savings-item">
+            <div class="ac-savings-emoji">✈️</div>
+            <div class="ac-savings-info">
+              <div class="ac-savings-name">Compte Vacances</div>
+              <div class="ac-budget-bar" style="height:8px;margin-top:6px"><div class="ac-budget-fill" style="width:50%;background:var(--fingreen)"></div></div>
+              <div class="ac-budget-nums">1 500 € / 3 000 €</div>
+            </div>
+            <div class="ac-savings-pct">50%</div>
+          </div>
+          <div class="ac-savings-item">
+            <div class="ac-savings-emoji">🎓</div>
+            <div class="ac-savings-info">
+              <div class="ac-savings-name">Compte Études</div>
+              <div class="ac-budget-bar" style="height:8px;margin-top:6px"><div class="ac-budget-fill" style="width:15%;background:var(--primary)"></div></div>
+              <div class="ac-budget-nums">3 000 € / 20 000 €</div>
+            </div>
+            <div class="ac-savings-pct">15%</div>
+          </div>
+          <div class="ac-savings-item" style="border:none">
+            <div class="ac-savings-emoji">🛡</div>
+            <div class="ac-savings-info">
+              <div class="ac-savings-name">Compte Urgence</div>
+              <div class="ac-budget-bar" style="height:8px;margin-top:6px"><div class="ac-budget-fill" style="width:75%;background:var(--fingreen)"></div></div>
+              <div class="ac-budget-nums">7 500 € / 10 000 €</div>
+            </div>
+            <div class="ac-savings-pct">75%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FEATURES GRID -->
+<section class="features">
+  <div class="section-header">
+    <h2>Tout ce dont votre foyer a besoin</h2>
+    <p>6 fonctionnalités pensées pour simplifier vos finances au quotidien.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon fi-blue">👨‍👩‍👧</div>
+      <h3>Mode Foyer & Perso</h3>
+      <p>Basculez entre vue familiale et personnelle en un tap. Chaque membre a sa visibilité tout en partageant une vision commune.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon fi-green">🤖</div>
+      <h3>Coach IA personnalisé</h3>
+      <p>Des conseils financiers adaptés à votre situation familiale. L'IA analyse vos habitudes et propose des actions concrètes.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon fi-orange">💰</div>
+      <h3>Budgets intelligents</h3>
+      <p>Créez des budgets par catégorie et suivez votre consommation en temps réel avec des alertes avant dépassement.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon fi-purple">🏠</div>
+      <h3>Suivi des dettes</h3>
+      <p>Crédit immobilier, prêt auto, dettes étudiantes — visualisez l'ensemble de vos engagements et leur progression.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon fi-teal">🏦</div>
+      <h3>Centralisation des comptes</h3>
+      <p>Réunissez tous vos comptes bancaires en un seul endroit. Créez des comptes séparés par objectif, sans jongler entre plusieurs E-Banking.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon fi-red">📸</div>
+      <h3>Scanner de reçus</h3>
+      <p>Photographiez vos tickets, FinHome catégorise automatiquement la dépense dans le bon budget.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SECURITY -->
+<section class="security" id="security" style="padding:60px 24px;background:linear-gradient(135deg,#0d2f47 0%,#1A5276 100%);color:#fff;text-align:center;">
+  <div style="max-width:640px;margin:0 auto;">
+    <div style="font-size:36px;margin-bottom:12px;">🔒</div>
+    <h2 style="font-size:clamp(24px,3.5vw,32px);font-weight:800;margin-bottom:12px;">La sécurité de vos données est notre priorité</h2>
+    <p style="font-size:16px;opacity:.9;line-height:1.7;">Vos données financières sont protégées. Nous ne revendons jamais vos informations personnelles.</p>
+  </div>
+</section>
+
+<!-- CALCULATOR -->
+<section class="calculator" id="calculator">
+  <div class="calc-container">
+    <h2>Calculez votre santé financière</h2>
+    <p class="calc-sub">Découvrez gratuitement le score de votre foyer en 30 secondes.</p>
+    <div class="calc-grid">
+      <div class="calc-row">
+        <label for="revenus">Revenus mensuels du foyer (€)</label>
+        <input type="number" id="revenus" placeholder="ex: 5500">
+      </div>
+      <div class="calc-row">
+        <label for="depenses">Dépenses mensuelles totales (€)</label>
+        <input type="number" id="depenses" placeholder="ex: 4200">
+      </div>
+      <div class="calc-row">
+        <label for="epargne">Épargne mensuelle (€)</label>
+        <input type="number" id="epargne" placeholder="ex: 300">
+      </div>
+      <div class="calc-row">
+        <label for="dettes">Total des dettes restantes (€)</label>
+        <input type="number" id="dettes" placeholder="ex: 180000">
+      </div>
+    </div>
+    <div class="calc-row">
+      <label for="membres">Nombre de personnes dans le foyer</label>
+      <select id="membres">
+        <option value="1">1 personne</option>
+        <option value="2" selected>2 personnes (couple)</option>
+        <option value="3">3 personnes</option>
+        <option value="4">4 personnes</option>
+        <option value="5">5+ personnes</option>
+      </select>
+    </div>
+    <button class="calc-btn" onclick="calculateScore()">Calculer mon score →</button>
+    <div class="calc-result" id="calcResult">
+      <div class="score-circle" id="scoreCircle"></div>
+      <div class="score-label" id="scoreLabel"></div>
+      <div class="score-detail" id="scoreDetail"></div>
+      <div class="score-cta">
+        <a href="https://fin-home.io/login" class="btn-primary" style="margin-top:16px;">Améliorer mon score avec FinHome →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="section-header">
+    <h2>Un prix simple, pour tout le foyer</h2>
+    <p>Pas de plan individuel. FinHome est pensé pour le foyer.</p>
+  </div>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-name">Foyer Mensuel</div>
+      <div class="price-amount">5,99€ <span>/mois</span></div>
+      <div class="price-save">&nbsp;</div>
+      <ul class="price-features">
+        <li>Tout le foyer (illimité)</li>
+        <li>Budgets illimités</li>
+        <li>Coach IA personnalisé</li>
+        <li>Suivi des dettes</li>
+        <li>Scanner de reçus</li>
+        <li>Centralisation des comptes</li>
+        <li>Rapports mensuels</li>
+      </ul>
+      <a href="https://fin-home.io/login" class="price-btn price-btn-outline">Commencer</a>
+    </div>
+    <div class="price-card popular">
+      <div class="price-name">Foyer Annuel</div>
+      <div class="price-amount">59,90€ <span>/an</span></div>
+      <div class="price-save">Économisez 17% — soit 4,99€/mois</div>
+      <ul class="price-features">
+        <li>Tout le foyer (illimité)</li>
+        <li>Budgets illimités</li>
+        <li>Coach IA personnalisé</li>
+        <li>Suivi des dettes</li>
+        <li>Scanner de reçus</li>
+        <li>Centralisation des comptes</li>
+        <li>Rapports mensuels</li>
+      </ul>
+      <a href="https://fin-home.io/login" class="price-btn price-btn-primary">Choisir l'annuel</a>
+    </div>
+    <div class="price-card">
+      <div class="price-name">Foyer à Vie</div>
+      <div class="price-amount">119,80€</div>
+      <div class="price-save">Paiement unique — accès permanent</div>
+      <ul class="price-features">
+        <li>Tout le foyer (illimité)</li>
+        <li>Budgets illimités</li>
+        <li>Coach IA personnalisé</li>
+        <li>Suivi des dettes</li>
+        <li>Scanner de reçus</li>
+        <li>Centralisation des comptes</li>
+        <li>Rapports mensuels</li>
+      </ul>
+      <a href="https://fin-home.io/login" class="price-btn price-btn-outline">Accès à vie</a>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="section-header">
+    <h2>Ils ont repris le contrôle</h2>
+    <p>Des foyers comme le vôtre utilisent FinHome au quotidien.</p>
+  </div>
+  <div class="testimonial-grid">
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">"Avant FinHome, mon conjoint et moi on n'avait aucune idée de nos dépenses communes. Maintenant on a une vision claire et on a commencé à épargner 400€/mois ensemble."</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">SL</div>
+        <div><div class="testimonial-name">Sophie L.</div><div class="testimonial-role">Couple, 2 enfants — Paris</div></div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">"Le suivi des dettes m'a ouvert les yeux. Je visualise enfin la progression de mes remboursements et le coach IA me donne des conseils vraiment pertinents."</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">MK</div>
+        <div><div class="testimonial-name">Marc K.</div><div class="testimonial-role">Père de famille — Lyon</div></div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">"Enfin une app en français qui comprend la gestion à plusieurs ! Le mode Foyer/Perso est génial, ma colocataire et moi on gère tout sans prise de tête."</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">AD</div>
+        <div><div class="testimonial-name">Amina D.</div><div class="testimonial-role">Colocation — Bruxelles</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq" id="faq">
+  <div class="section-header">
+    <h2>Questions fréquentes</h2>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">FinHome est-il gratuit ? <span class="arrow">▼</span></button>
+      <div class="faq-answer">Vous pouvez créer un compte et explorer l'application gratuitement. Pour accéder à toutes les fonctionnalités (Coach IA, gestion des dettes, rapports, scanner de reçus), un abonnement Foyer est nécessaire à partir de 5,99€/mois.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">Combien de personnes peuvent utiliser FinHome ? <span class="arrow">▼</span></button>
+      <div class="faq-answer">Avec l'abonnement Foyer, tout votre foyer peut utiliser FinHome — conjoint(e), enfants, colocataires. Chacun a son propre espace personnel tout en partageant la vue Foyer commune.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">Mes données financières sont-elles sécurisées ? <span class="arrow">▼</span></button>
+      <div class="faq-answer">Absolument. FinHome utilise un chiffrement de bout en bout et ne stocke jamais vos identifiants bancaires. Vos données sont hébergées en Europe et respectent le RGPD. Nous ne revendons jamais vos données.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">Qu'est-ce que le Coach IA ? <span class="arrow">▼</span></button>
+      <div class="faq-answer">Le Coach IA analyse les finances de votre foyer et vous donne des conseils personnalisés : optimisation de budget, stratégies d'épargne, alertes de dépassement. C'est comme avoir un conseiller financier dans votre poche, sans le coût.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">Puis-je annuler mon abonnement à tout moment ? <span class="arrow">▼</span></button>
+      <div class="faq-answer">Oui, vous pouvez annuler votre abonnement à tout moment depuis l'application. Aucun engagement, aucuns frais cachés. Votre accès reste actif jusqu'à la fin de la période payée.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">FinHome fonctionne-t-il en dehors de la France ? <span class="arrow">▼</span></button>
+      <div class="faq-answer">Oui ! FinHome est disponible dans toute la francophonie : France, Belgique, Suisse, Canada, Afrique francophone et partout où vous gérez vos finances en euros ou en devise locale.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <h2>Prêts à reprendre le contrôle ?</h2>
+  <p>Rejoignez les foyers qui gèrent enfin leurs finances sereinement, ensemble.</p>
+  <a href="https://fin-home.io/login" class="btn-white">Créer mon foyer gratuitement →</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="#" class="logo">Fin<span style="color:#4CAF82">Home</span></a>
+      <p>La gestion financière du foyer, simplifiée. Budgets, dettes, épargne et coaching IA dans une seule app.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Produit</h4>
+      <a href="#features">Fonctionnalités</a>
+      <a href="#pricing">Tarifs</a>
+      <a href="#calculator">Calculateur</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <div class="footer-col">
+      <h4>Ressources</h4>
+      <a href="#">Blog</a>
+      <a href="#">Guide budget familial</a>
+      <a href="#">Centre d'aide</a>
+    </div>
+    <div class="footer-col">
+      <h4>Légal</h4>
+      <a href="#">Conditions d'utilisation</a>
+      <a href="#">Politique de confidentialité</a>
+      <a href="#">Mentions légales</a>
+      <a href="#">RGPD</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2026 FinHome. Tous droits réservés.
+  </div>
+</footer>
+
+<script>
+function calculateScore() {
+  const revenus = parseFloat(document.getElementById('revenus').value) || 0;
+  const depenses = parseFloat(document.getElementById('depenses').value) || 0;
+  const epargne = parseFloat(document.getElementById('epargne').value) || 0;
+  const dettes = parseFloat(document.getElementById('dettes').value) || 0;
+  if (revenus === 0) { alert('Veuillez entrer vos revenus mensuels.'); return; }
+  let score = 50;
+  const tauxEpargne = (epargne / revenus) * 100;
+  if (tauxEpargne >= 20) score += 25;
+  else if (tauxEpargne >= 10) score += 15;
+  else if (tauxEpargne >= 5) score += 8;
+  else score -= 5;
+  const ratio = depenses / revenus;
+  if (ratio <= 0.6) score += 15;
+  else if (ratio <= 0.8) score += 8;
+  else if (ratio <= 0.95) score -= 5;
+  else score -= 15;
+  const dr = dettes / (revenus * 12);
+  if (dr === 0) score += 10;
+  else if (dr <= 3) score += 5;
+  else if (dr <= 6) score -= 0;
+  else if (dr <= 10) score -= 10;
+  else score -= 15;
+  score = Math.max(5, Math.min(100, Math.round(score)));
+  let label, color, bg, detail;
+  if (score >= 80) { label = 'Excellente'; color = '#27AE60'; bg = '#EAFAF1'; detail = 'Votre foyer a une santé financière remarquable. Continuez ainsi et optimisez votre épargne avec le Coach IA de FinHome.'; }
+  else if (score >= 60) { label = 'Bonne'; color = '#2980B9'; bg = '#EBF5FB'; detail = 'Votre foyer est sur la bonne voie. FinHome peut vous aider à identifier les leviers pour passer au niveau supérieur.'; }
+  else if (score >= 40) { label = 'À améliorer'; color = '#F39C12'; bg = '#FEF9E7'; detail = 'Il y a du potentiel ! FinHome peut vous aider à optimiser vos budgets et accélérer votre épargne.'; }
+  else { label = 'Attention requise'; color = '#E74C3C'; bg = '#FDEDEC'; detail = 'Votre foyer a besoin d\'attention. Le Coach IA de FinHome peut créer un plan d\'action personnalisé.'; }
+  const result = document.getElementById('calcResult');
+  document.getElementById('scoreCircle').textContent = score;
+  document.getElementById('scoreCircle').style.background = color;
+  document.getElementById('scoreLabel').textContent = label;
+  document.getElementById('scoreLabel').style.color = color;
+  document.getElementById('scoreDetail').textContent = detail;
+  result.style.background = bg;
+  result.classList.add('show');
+  result.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+function toggleFaq(el) {
+  el.classList.toggle('active');
+  el.nextElementSibling.classList.toggle('show');
+}
+</script>
+</body>
+</html>
